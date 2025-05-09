@@ -5,7 +5,5 @@ node_modules/
 .env
 
 # Database dumps
-blog_database_dump/
+local_dump/
 
-#other entites
-info.js
