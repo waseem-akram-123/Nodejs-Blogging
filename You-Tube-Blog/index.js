@@ -31,7 +31,13 @@ mongoose
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use(express.static(path.join(__dirname, "public")));
+// app.use(express.static(path.join(__dirname, "public")));
+// app.use(
+//   "/uploads",
+//   express.static(path.join(__dirname, "public/images/uploads"))
+// );
+
+app.use("/uploads", express.static(path.join(__dirname, "public/images/uploads")));
 app.use("/images/uploads", express.static(path.join(__dirname, "public/images/uploads")));
 
 
