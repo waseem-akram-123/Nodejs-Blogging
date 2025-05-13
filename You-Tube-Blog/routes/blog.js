@@ -8,12 +8,21 @@ const Blog = require("../models/blog");
 
 const Comment = require("../models/comment");
 
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, path.resolve(__dirname, "../public/images/uploads/")); //--> path // ${req.user._id}
+//   },
+//   filename: function (req, file, cb) {
+//     const fileName = `${Date.now()}${file.originalname}`;
+//     cb(null, fileName);
+//   },
+// });
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.resolve(__dirname, "../public/images/uploads/")); //--> path // ${req.user._id}
+    cb(null, uploadsDir);
   },
   filename: function (req, file, cb) {
-    const fileName = `${Date.now()}${file.originalname}`;
+    const fileName = `${Date.now()}-${file.originalname}`;
     cb(null, fileName);
   },
 });
@@ -62,7 +71,9 @@ router.post("/", upload.single("CoverImage"), async (req, res) => {
     body,
     title,
     createdBy: req.user._id,
-    coverImageURL: `/uploads/${req.file.filename}`,
+    // coverImageURL: `/uploads/${req.file.filename}`,
+    coverImageURL: `/images/uploads/${req.file.filename}`,
+
   });
 
   return res.redirect(`/blog/${blog._id}`); // as we dont have /blog/blog_id route --> create this route
