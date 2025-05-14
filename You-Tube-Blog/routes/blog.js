@@ -10,7 +10,7 @@ const Comment = require("../models/comment");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.resolve(__dirname, "../public/images/uploads/")); //--> path // ${req.user._id}
+    cb(null, path.resolve(__dirname, "../public/images/uploads/")); //--> location were the images needs to be stored
   },
   filename: function (req, file, cb) {
     const fileName = `${Date.now()}${file.originalname}`;
@@ -20,9 +20,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-router.get("/add-new", (req, res) => {
+router.get("/add-new", (req, res) => {   // a router created to visit the add-blog page
   return res.render("addBlog", {
-    user: req.user,
+    user: req.user,   // since navigation bar is in blogpage also   check add-blog view you will see (./partials/nav)
   });
 });
 
@@ -54,15 +54,16 @@ router.post("/comment/:blogId", async (req, res) => {
   return res.redirect(`/blog/${req.params.blogId}`);
 });
 
-router.post("/", upload.single("CoverImage"), async (req, res) => {
-  // console.log (req.body);
-  // console.log (req.file);
+router.post("/", upload.single("CoverImage"), async (req, res) => {   // this / will be used in post action form of addBlog.ejs
+  // console.log (req.body);   //  cover image, body, title
+  // console.log (req.file);   // file related attributes
   const { title, body } = req.body;
   const blog = await Blog.create({
     body,
     title,
     createdBy: req.user._id,
-    coverImageURL: `/uploads/${req.file.filename}`,
+    // coverImageURL: `/uploads/${req.file.filename}`,  //   /uploads/23.3jpeg
+    coverImageURL: `/images/uploads/${req.file.filename}`,
   });
 
   return res.redirect(`/blog/${blog._id}`); // as we dont have /blog/blog_id route --> create this route
